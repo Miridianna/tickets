@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ public class ManagerTest {
 
     static Ticket first = new Ticket(1, 6287, LED, KZN, 133);
     static Ticket second = new Ticket(2, 1299, SVO, KZN, 95);
-    static Ticket third = new Ticket(3, 3899, VKO, KZN, 95);
+    static Ticket third = new Ticket(3, 3899, SVO, KZN, 95);
     static Ticket fourth = new Ticket(4, 110, LA, KZN, 1200);
 
 
@@ -32,6 +33,52 @@ public class ManagerTest {
     public void shouldFindAll() {
         Ticket[] expected = {fourth};
         assertArrayEquals(expected, manager.searchBy(LA, KZN));
+    }
+
+    @Test
+    public void searchBy() {
+        Repository repo = new Repository();
+        Manager manager = new Manager(repo);
+
+        manager.add(first);
+        manager.add(second);
+        manager.add(third);
+        manager.add(fourth);
+
+        Ticket[] expected = { first };
+        Ticket[] actual = manager.searchBy(LED, KZN);
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void searchNoTicket() {
+        Repository repo = new Repository();
+        Manager manager = new Manager(repo);
+
+        manager.add(first);
+        manager.add(second);
+        manager.add(third);
+        manager.add(fourth);
+
+        Ticket[] expected = {};
+        Ticket[] actual = manager.searchBy(LED, LA);
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void searchTwoTicket() {
+        Repository repo = new Repository();
+        Manager manager = new Manager(repo);
+
+        manager.add(first);
+        manager.add(second);
+        manager.add(third);
+        manager.add(fourth);
+
+        Ticket[] expected = { second, third };
+        Ticket[] actual = manager.searchBy(SVO, KZN);
+        Assertions.assertArrayEquals(expected, actual);
+
     }
 
     @Test
